@@ -6,46 +6,45 @@
   <meta name="robots" content="noindex, nofollow" />
 
   <script>
-    (function () {
-      let path = decodeURIComponent(window.location.pathname);
+(function () {
+  let path = decodeURIComponent(window.location.pathname);
 
-      // Baştaki slash'leri kaldır
-      path = path.replace(/^\/+/, '');
+  path = path.replace(/^\/+/, '');
 
-      if (!path) {
-        window.location.replace('https://cs2.frudotz.com/');
-        return;
-      }
+  if (!path) {
+    window.location.replace('https://cs2.frudotz.com/');
+    return;
+  }
 
-      let result;
+  let identifier = null;
 
-      // 1️⃣ Komple Steam URL geldiyse → aynen bırak
-      if (path.startsWith('https://steamcommunity.com/')) {
-        result = path;
-      }
+  if (path.startsWith('https://steamcommunity.com/')) {
+    try {
+      const u = new URL(path);
+      const parts = u.pathname.split('/').filter(Boolean);
 
-      // 2️⃣ /id/username → username
-      else if (path.startsWith('id/')) {
-        result = path.slice(3);
-      }
+      if (parts[0] === 'id' && parts[1]) identifier = parts[1];
+      else if (parts[0] === 'profiles' && parts[1]) identifier = parts[1];
+    } catch {}
+  }
 
-      // 3️⃣ /profiles/steamid → steamid
-      else if (path.startsWith('profiles/')) {
-        result = path.slice(9);
-      }
+  else {
+    const parts = path.split('/').filter(Boolean);
 
-      // 4️⃣ Direkt username veya steamid
-      else {
-        result = path;
-      }
+    if (parts[0] === 'id' && parts[1]) identifier = parts[1];
+    else if (parts[0] === 'profiles' && parts[1]) identifier = parts[1];
+    else identifier = parts[0];
+  }
 
-      // Sonda slash varsa temizle
-      result = result.replace(/\/+$/, '');
+  if (!identifier) {
+    window.location.replace('https://cs2.frudotz.com/');
+    return;
+  }
 
-      const target = 'https://cs2.frudotz.com/' + result;
-      window.location.replace(target);
-    })();
-  </script>
+  const target = 'https://cs2.frudotz.com/' + encodeURIComponent(identifier);
+  window.location.replace(target);
+})();
+</script>
 </head>
 <body>
   <noscript>
