@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Redirecting…</title>
+  <meta name="robots" content="noindex, nofollow" />
+
+  <script>
+    (function () {
+      let path = decodeURIComponent(window.location.pathname);
+
+      // Baştaki slash'leri kaldır
+      path = path.replace(/^\/+/, '');
+
+      if (!path) {
+        window.location.replace('https://cs2.frudotz.com/');
+        return;
+      }
+
+      let result;
+
+      // 1️⃣ Komple Steam URL geldiyse → aynen bırak
+      if (path.startsWith('https://steamcommunity.com/')) {
+        result = path;
+      }
+
+      // 2️⃣ /id/username → username
+      else if (path.startsWith('id/')) {
+        result = path.slice(3);
+      }
+
+      // 3️⃣ /profiles/steamid → steamid
+      else if (path.startsWith('profiles/')) {
+        result = path.slice(9);
+      }
+
+      // 4️⃣ Direkt username veya steamid
+      else {
+        result = path;
+      }
+
+      // Sonda slash varsa temizle
+      result = result.replace(/\/+$/, '');
+
+      const target = 'https://cs2.frudotz.com/' + result;
+      window.location.replace(target);
+    })();
+  </script>
+</head>
+<body>
+  <noscript>
+        <p>This site only redirects Steam profile URLs.</p>
+        <p>Not affiliated with Valve or Steam.</p>
+  </noscript>
+</body>
+</html>
